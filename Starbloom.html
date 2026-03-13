@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Starbloom Gift Rain</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-family: "M PLUS Rounded 1c", sans-serif;
+
+        background:
+          radial-gradient(circle at 25% 20%, #ffe6f4, transparent 40%),
+          radial-gradient(circle at 75% 30%, #ffd4ec, transparent 40%),
+          linear-gradient(135deg, #ffc9e8, #ffb8df, #ffd7f0);
+
+        overflow: hidden;
+        transition: background 0.6s;
+      }
+
+      body.night {
+        background:
+          radial-gradient(circle at 20% 20%, #37204c, transparent 40%),
+          radial-gradient(circle at 80% 30%, #241334, transparent 40%),
+          linear-gradient(135deg, #14081f, #1c0f2a, #0f0719);
+      }
+
+      #petals {
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 100%;
+
+        pointer-events: none;
+
+        z-index: 0;
+      }
+
+      .petal {
+        position: absolute;
+        top: -40px;
+
+        animation: fall linear forwards;
+
+        opacity: 0.85;
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(-40px) translateX(0) rotate(0deg);
+          opacity: 0;
+        }
+
+        10% {
+          opacity: 0.9;
+        }
+
+        100% {
+          transform: translateY(110vh) translateX(120px) rotate(360deg);
+          opacity: 0.7;
+        }
+      }
+
+      /* CARD */
+
+      .card {
+        position: relative;
+        z-index: 2;
+
+        width: 720px;
+
+        padding: 50px;
+
+        border-radius: 34px;
+
+        background: rgba(255, 255, 255, 0.92);
+
+        box-shadow:
+          0 18px 45px rgba(0, 0, 0, 0.15),
+          0 0 12px rgba(255, 160, 210, 0.18);
+
+        text-align: center;
+
+        transition: all 0.5s;
+      }
+
+      body.night .card {
+        background: rgba(30, 18, 45, 0.9);
+        color: #ffd7ff;
+
+        box-shadow:
+          0 20px 60px rgba(0, 0, 0, 0.6),
+          0 0 18px rgba(200, 120, 255, 0.25);
+      }
+
+      .title {
+        font-size: 42px;
+        font-weight: 800;
+      }
+
+      .subtitle {
+        margin-top: 8px;
+        font-size: 16px;
+        opacity: 0.75;
+      }
+
+      .countdown {
+        font-size: 64px;
+        font-weight: 800;
+
+        margin-top: 22px;
+
+        color: #ff4fa8;
+
+        text-shadow: 0 0 6px rgba(255, 120, 190, 0.35);
+      }
+
+      body.night .countdown {
+        color: #ff8cff;
+      }
+
+      .nextEvent {
+        font-size: 32px;
+        margin-top: 8px;
+        font-weight: 600;
+      }
+
+      .section {
+        margin-top: 34px;
+      }
+
+      .section h3 {
+        margin-bottom: 14px;
+      }
+
+      .events {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .event {
+        width: 200px;
+
+        padding: 10px;
+
+        border-radius: 999px;
+
+        background: rgba(255, 210, 235, 0.65);
+
+        font-size: 28px;
+
+        font-weight: 600;
+      }
+
+      body.night .event {
+        background: rgba(120, 80, 160, 0.4);
+      }
+
+      .zones {
+        margin-top: 16px;
+
+        display: flex;
+        justify-content: center;
+
+        gap: 10px;
+      }
+
+      .zone {
+        padding: 8px 16px;
+
+        border-radius: 999px;
+
+        background: rgba(255, 210, 235, 0.7);
+      }
+
+      body.night .zone {
+        background: rgba(120, 80, 160, 0.4);
+      }
+
+      .footer {
+        margin-top: 22px;
+
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .nightToggle {
+        position: absolute;
+        top: 12px;
+        right: 14px;
+
+        width: 20px;
+        height: 20px;
+
+        opacity: 0;
+
+        cursor: pointer;
+      }
+
+      .nightToggle:hover {
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="petals"></div>
+
+    <div class="card">
+      <div class="nightToggle" onclick="toggleNight()">🌙</div>
+
+      <div class="title">🌸 Starbloom Gift Rain 🌸</div>
+
+      <div class="subtitle">🌸 Next Starbloom gift rain begins in 🌸</div>
+
+      <div class="countdown" id="countdown">--:--:--</div>
+
+      <div class="nextEvent" id="nextEvent">Loading...</div>
+
+      <div class="section">
+        <h3>🌸 Today's Gift Rain Times 🌸</h3>
+
+        <div class="events" id="eventList"></div>
+      </div>
+
+      <div class="section">
+        <h3>🌸 Gift Rain Zones 🌸</h3>
+
+        <div class="zones">
+          <div class="zone">Herba Village</div>
+          <div class="zone">Canina Village</div>
+          <div class="zone">Kastleton</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        🌸 Gather beneath the blossoms and yoink the raining gifts 🌸
+      </div>
+    </div>
+
+    <script>
+      const weekdayEventsUTC = ["01:30", "05:30", "12:30", "21:30"];
+
+      const weekendEventsUTC = ["01:30", "05:30", "12:30", "16:30", "21:30"];
+
+      function getEventsForDay(date) {
+        const day = date.getUTCDay();
+
+        if (day === 0 || day === 6) return weekendEventsUTC;
+
+        return weekdayEventsUTC;
+      }
+
+      function utcTimeToLocal(date, time) {
+        const [h, m] = time.split(":");
+
+        return new Date(
+          Date.UTC(
+            date.getUTCFullYear(),
+            date.getUTCMonth(),
+            date.getUTCDate(),
+            h,
+            m,
+          ),
+        );
+      }
+
+      function findNextEvent() {
+        const now = new Date();
+
+        for (let i = 0; i < 3; i++) {
+          const day = new Date(now);
+          day.setUTCDate(now.getUTCDate() + i);
+
+          const events = getEventsForDay(day);
+
+          for (const time of events) {
+            const eventDate = utcTimeToLocal(day, time);
+
+            if (eventDate > now) {
+              return eventDate;
+            }
+          }
+        }
+      }
+
+      function formatDuration(ms) {
+        let total = Math.floor(ms / 1000);
+
+        const days = Math.floor(total / 86400);
+        total %= 86400;
+
+        const hours = Math.floor(total / 3600);
+        total %= 3600;
+
+        const minutes = Math.floor(total / 60);
+        const seconds = total % 60;
+
+        let str = "";
+
+        if (days > 0) {
+          str += days + "d ";
+        }
+
+        str +=
+          String(hours).padStart(2, "0") +
+          ":" +
+          String(minutes).padStart(2, "0") +
+          ":" +
+          String(seconds).padStart(2, "0");
+
+        return str;
+      }
+
+      function update() {
+        const now = new Date();
+        const nextEvent = findNextEvent();
+
+        const remaining = nextEvent - now;
+
+        document.getElementById("countdown").innerText =
+          formatDuration(remaining);
+
+        document.getElementById("nextEvent").innerText =
+          "🌸 " + nextEvent.toLocaleString();
+
+        const events = getEventsForDay(new Date());
+
+        const list = document.getElementById("eventList");
+        list.innerHTML = "";
+
+        for (const time of events) {
+          const local = utcTimeToLocal(new Date(), time);
+
+          const div = document.createElement("div");
+          div.className = "event";
+
+          div.textContent =
+            "🌸 " +
+            local.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+
+          list.appendChild(div);
+        }
+      }
+
+      update();
+      setInterval(update, 1000);
+
+      const petalsContainer = document.getElementById("petals");
+
+      function createPetal() {
+        const petal = document.createElement("div");
+
+        petal.className = "petal";
+
+        petal.innerText = Math.random() < 0.99 ? "🌸" : "🎁";
+
+        petal.style.left = Math.random() * 100 + "vw";
+
+        const duration = 6 + Math.random() * 6;
+
+        petal.style.animationDuration = duration + "s";
+
+        petal.style.fontSize = 16 + Math.random() * 16 + "px";
+
+        petalsContainer.appendChild(petal);
+
+        setTimeout(() => {
+          petal.remove();
+        }, duration * 1000);
+      }
+
+      setInterval(createPetal, 300);
+
+      function toggleNight() {
+        document.body.classList.toggle("night");
+      }
+    </script>
+  </body>
+</html>
