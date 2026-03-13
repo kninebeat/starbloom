@@ -419,26 +419,30 @@
         document.body.classList.toggle("night");
       }
 
-      const secretCode = "shiba";
+      const secrets = [
+        { code: "shiba", message: "shiba is goated" },
+        { code: "yoink", message: "YOINK ON TOP" },
+      ];
       let typed = "";
 
       document.addEventListener("keydown", (e) => {
         typed += e.key.toLowerCase();
 
-        if (!secretCode.startsWith(typed)) {
-          typed = e.key.toLowerCase();
-        }
+        if (typed.length > 10) typed = typed.slice(-10);
 
-        if (typed === secretCode) {
-          const msg = document.getElementById("secretMessage");
-          msg.classList.add("show");
+        secrets.forEach((s) => {
+          if (typed.endsWith(s.code)) {
+            const msg = document.getElementById("secretMessage");
+            msg.innerText = s.message;
+            msg.classList.add("show");
 
-          setTimeout(() => {
-            msg.classList.remove("show");
-          }, 5000);
+            setTimeout(() => {
+              msg.classList.remove("show");
+            }, 5000);
 
-          typed = "";
-        }
+            typed = "";
+          }
+        });
       });
     </script>
   </body>
