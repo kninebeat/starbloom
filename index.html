@@ -36,6 +36,32 @@
           linear-gradient(135deg, #14081f, #1c0f2a, #0f0719);
       }
 
+      #secretMessage {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%) scale(0.8);
+        padding: 10px 20px;
+        border-radius: 999px;
+        transition: all 1s;
+
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+
+        font-weight: 700;
+        letter-spacing: 1px;
+
+        opacity: 0;
+        pointer-events: none;
+
+        transition: all 0.4s;
+      }
+
+      #secretMessage.show {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+      }
+
       #petals {
         position: fixed;
         top: 0;
@@ -73,8 +99,6 @@
           opacity: 0.7;
         }
       }
-
-      /* CARD */
 
       .card {
         position: relative;
@@ -251,6 +275,7 @@
       <div class="footer">
         🌸 Gather beneath the blossoms and yoink the raining gifts 🌸
       </div>
+      <div id="secretMessage">shiba is goated</div>
     </div>
 
     <script>
@@ -393,6 +418,28 @@
       function toggleNight() {
         document.body.classList.toggle("night");
       }
+
+      const secretCode = "shiba";
+      let typed = "";
+
+      document.addEventListener("keydown", (e) => {
+        typed += e.key.toLowerCase();
+
+        if (!secretCode.startsWith(typed)) {
+          typed = e.key.toLowerCase();
+        }
+
+        if (typed === secretCode) {
+          const msg = document.getElementById("secretMessage");
+          msg.classList.add("show");
+
+          setTimeout(() => {
+            msg.classList.remove("show");
+          }, 5000);
+
+          typed = "";
+        }
+      });
     </script>
   </body>
 </html>
